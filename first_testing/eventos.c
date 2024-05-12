@@ -1,5 +1,6 @@
-//eventos.c
-//librerías necesarias para las funciones
+// eventos.c
+//*librerías necesarias para las funciones
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -64,6 +65,7 @@ void evento_caja (struct Recursos *recursos) //evento de caja sola
         printf("Un ratón te robo, perdiste 2 unidades de comida\n");
         recursos->c = recursos->c - 2;
     } 
+
     //recursos-> dia = recursos-> dia + 0.5;
 }
 
