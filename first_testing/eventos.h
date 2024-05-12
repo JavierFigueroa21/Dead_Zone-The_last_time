@@ -17,3 +17,4 @@ void evento_caja_advertencia (struct Recursos *recursos);//*supongo que un int d
 void evento_caja (struct Recursos *recursos);//*supongo que un int de agua y otro de comida
 
 #endif // * EVENTOS_H
+//hola
