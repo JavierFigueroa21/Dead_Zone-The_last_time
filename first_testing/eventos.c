@@ -1,4 +1,4 @@
-//*eventos.c
+// eventos.c
 //*librerías necesarias para las funciones
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,3 +65,5 @@ void evento_caja (struct Recursos *recursos) //*evento de caja sola
     } 
     
 }
+
+// ejemplo de commit 
