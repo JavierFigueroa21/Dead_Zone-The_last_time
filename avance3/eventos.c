@@ -1,13 +1,15 @@
 // eventos.c
+//* Implementación de las funciones para la gestión de eventos y recursos en el juego.
 //*librerías necesarias para las funciones
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
 
-//archivo de implementación de la librería eventos.h.
+//* Archivo de implementación de la librería eventos.h.
 #include "eventos.h"
-//Macros
+//* Macros
+//* Inicializa el generador de números aleatorios.
 #define SRAND srand(time(NULL));//generar números aleatorios totalmente diferentes con el tiempo
 
 void inicializar_recursos(struct Recursos *recursos, struct Dia *dia)
@@ -25,7 +27,7 @@ void eventos(struct Dia *dia) {
 }
 
 //* Funciones de eventos:
-
+//* Permite al jugador elegir un paquete inicial de recursos al comienzo del juego.
 void seleccionar_recursos_iniciales(struct Recursos *recursos) 
 {
     int eleccion;
@@ -50,7 +52,7 @@ void seleccionar_recursos_iniciales(struct Recursos *recursos)
         recursos->a = 0;
     }
 }
-
+//* Función que gestiona las acciones del jugador en el refugio.
 void gestionar_refugio(struct Recursos *recursos) {
     int opcion;
     bool accionValida = false;
@@ -111,7 +113,7 @@ void gestionar_refugio(struct Recursos *recursos) {
         }
     }
 }
-
+//* Gestiona el evento aleatorio de encontrar una caja con advertencia.
 void evento_caja_advertencia (struct Recursos *recursos, struct Dia *dia)//evento de caja con avisos
 {
     SRAND //macro
@@ -208,7 +210,8 @@ void eveto_buscando_recursos(struct Recursos *recursos, struct Dia *dia)
 }
 
 
-//Asignar dicha probabilidad dentro de eventos
+//* Función para gestionar la probabilidad de eventos durante la exploración.
+//* Asignar dicha probabilidad dentro de eventos
 bool probabilidad_eventos (struct Recursos *recursos, struct Dia *dia)
 {
     SRAND//macro
