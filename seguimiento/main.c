@@ -116,7 +116,7 @@ void creditos ()
 {
     printf("\nGracias por jugar att:\n- Alan\n- Victoria\n- Javier\n\n");
 }
-void inventario ()
-{
+//void inventario ()
+//{
     
-}
+//}

@@ -19,6 +19,8 @@ void inicializar_recursos(struct Recursos *recursos)
     recursos->vida = 100;
     recursos->arma=0;
 }
+// * aqui agregaron eventos dia, que imprime el dia
+
 
 
 //* Funciones de eventos:
@@ -27,8 +29,6 @@ void evento_caja_advertencia (struct Recursos *recursos)//evento de caja con avi
     SRAND //macro
     // Generar un número aleatorio entre 0 y 9
     int probabilidad = rand() % 10;
-
-    printf("%d\n", probabilidad);//linea no necesaria
     // Asignar los eventos con las probabilidades respectivas
     if(probabilidad == 0 || probabilidad == 1 )//probabilidad 20%
     {
@@ -39,13 +39,14 @@ void evento_caja_advertencia (struct Recursos *recursos)//evento de caja con avi
     {
         printf("Encontraste 2 botellas de agua\n");
         recursos->a = recursos->a + 2;
-        //+2u de agua
     } 
     else//restante 70%
     {
         printf("Esta caja tenia dentro gases que te enfermaron\n");
-        recursos->c = recursos->c - 2;
-        recursos->a = recursos->a - 3;
+        recursos->c = recursos->c > 1 ? recursos->c - 1 : 0;
+        recursos->a = recursos->a > 1 ? recursos->a - 1 : 0;
+        //recursos->vida = recursos->vida > 20 ? recursos->vida - 20 : 0;
+        recursos->vida = recursos->vida -20;
     }
 }
 
@@ -65,7 +66,8 @@ void evento_caja (struct Recursos *recursos)
     else //probabilidad 50%
     {
         printf("Un ratón te robo, perdiste 2 unidades de comida\n");
-        recursos->c = recursos->c - 2;
+        //recursos->c = recursos->c - 1;
+        recursos->c = recursos->c > 1 ? recursos->c - 1 : 0;
     } 
     //recursos-> dia = recursos-> dia + 0.5;
 }
@@ -79,7 +81,7 @@ void probabilidad_eventos (struct Recursos *recursos)
     if (probabilidad == 0 || probabilidad == 1)  
     {
         //función de la caja normal
-        printf("Acabas de encontrar una caja normal\n");
+        printf("\nAcabas de encontrar una caja normal\n");
         printf("Quieres abrir la caja? 1 para si, 0 para no: ");
         int abrirCaja;
         scanf("%d", &abrirCaja);
@@ -91,7 +93,7 @@ void probabilidad_eventos (struct Recursos *recursos)
     }
     else if (probabilidad == 2)//evento caja con avisos
     {
-        printf("Acabas de encontrar una caja con varias etiquetas de advertencia\n");
+        printf("\nAcabas de encontrar una caja con varias etiquetas de advertencia\n");
         printf("Quieres abrir la caja? 1 para si, 0 para no: ");
         int abrirCaja;
         scanf("%d", &abrirCaja);
@@ -142,13 +144,15 @@ void evento_buscando_recursos(struct Recursos *recursos, int dia) {
                 } else {
                     printf("\nEl zombie hace que te hieras gravemente.\n");
                     printf("Esto hace que pierdas vida y por lo tanto recursos");
-                    recursos->vida -= 20; // Ajusta este valor según la dificultad deseada
-                    recursos->a -=2;
-                    recursos->c -=1;
+                    recursos->vida = recursos->vida > 20 ? recursos->vida - 20 : 0;
+                    recursos->a = recursos->a > 2 ? recursos->a - 2 : 0;
+                    recursos->c = recursos->c > 1 ? recursos->c - 1 : 0;
                 }
             } else if (dia >= 40 && resultado == 9) {
                 printf("\nEs un rescatista que te lleva a una comunidad segura.\n");
-                // Lógica para terminar el juego o cambiar de escenario
+                printf("Se termina el juego, vaya suerte!");
+                break;
+                //* se termino el juego
             } else {
                 printf("\nNo hay nada, el ruido era del viento.\n");
             }
@@ -163,10 +167,11 @@ void evento_buscando_recursos(struct Recursos *recursos, int dia) {
 void seleccionar_recursos_iniciales(struct Recursos *recursos) {
     int eleccion;
     printf("\nAntes de comenzar el juego, puedes elegir un paquete inicial de recursos:\n");
-    printf("1. Paquete alto en comida (5 unidades de comida, 2 de agua)\n");
+    printf("\n1. Paquete alto en comida (5 unidades de comida, 2 de agua)\n");
     printf("2. Paquete alto en agua (2 unidades de comida, 5 de agua)\n");
     printf("3. Paquete equilibrado\n");
-    printf("Elige una opción (1 o 2): ");
+    printf("\nToma en cuenta que esto puede afectar en tu supervivencia");
+    printf("\nElige una opción (1 o 3): ");
     scanf("%d", &eleccion);
     if (eleccion == 1) {
         recursos->c = 5;
@@ -174,6 +179,9 @@ void seleccionar_recursos_iniciales(struct Recursos *recursos) {
     } else if (eleccion == 2) {
         recursos->c = 2;
         recursos->a = 5;
+    } else if (eleccion == 3){
+        recursos->c = 3;
+        recursos->a = 3;
     } else {
         printf("Opción no válida. Por lo que no obtendrás ningún recurso\n");
         recursos->c = 0;
@@ -198,7 +206,7 @@ void gestionar_refugio(struct Recursos *recursos) {
             case 1:
                 if (recursos->c > 0) {
                     recursos->c--;
-                    recursos->vida += 10;  // Ajusta este valor según la mecánica de juego
+                    recursos->vida = (recursos->vida + 10 > 100) ? 100 : recursos->vida + 10;
                     printf("Has comido algo, te sientes mejor.\n");
                     accionValida = true;
                 } else {
@@ -208,7 +216,7 @@ void gestionar_refugio(struct Recursos *recursos) {
             case 2:
                 if (recursos->a > 0) {
                     recursos->a--;
-                    recursos->vida += 5;   // Ajusta este valor según la mecánica de juego
+                    recursos->vida = (recursos->vida + 5 > 100) ? 100 : recursos->vida + 5;
                     printf("Has bebido agua, te sientes más hidratado.\n");
                     accionValida = true;
                 } else {
@@ -219,7 +227,7 @@ void gestionar_refugio(struct Recursos *recursos) {
                 if (recursos->a > 0 && recursos->c > 0) {
                     recursos->a--;
                     recursos->c--;
-                    recursos->vida += 15;  // Incremento de vida más significativo al consumir ambos
+                    recursos->vida = (recursos->vida + 15 > 100) ? 100 : recursos->vida + 15;  // Incremento de vida más significativo al consumir ambos
                     printf("Has consumido agua y comida, mejorando significativamente tu salud.\n");
                     accionValida = true;
                 } else {
